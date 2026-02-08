@@ -56,6 +56,7 @@ body {
     padding: 8px 18px;        /* растягиваем кликабельную зону */
     color: #e6d6c3;
     text-decoration: none;
+    transition: all 0.25s ease;
 }
 
 .nav a:hover {

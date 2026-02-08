@@ -1,59 +1,81 @@
-// === Smooth scroll ===
+// ===============================
+// Smooth scroll
+// ===============================
+
 document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
         e.preventDefault();
+
         const target = document.querySelector(link.getAttribute('href'));
+
         if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
         }
     });
 });
 
-// === Active menu via IntersectionObserver ===
+
+// ===============================
+// Active menu (Hero + Sections)
+// ===============================
 
 const menuLinks = document.querySelectorAll('.nav a');
-const sections = document.querySelectorAll('section[id]');
+const observedSections = document.querySelectorAll('section[id], header[id]');
+
+let currentActive = null;
 
 const menuObserver = new IntersectionObserver(entries => {
 
     entries.forEach(entry => {
+
         if (entry.isIntersecting) {
 
             const id = entry.target.getAttribute('id');
 
-            menuLinks.forEach(link => {
-                link.classList.remove('active');
+            if (currentActive !== id) {
+                currentActive = id;
 
-                if (link.getAttribute('href') === `#${id}`) {
-                    link.classList.add('active');
-                }
-            });
+                menuLinks.forEach(link => {
+                    link.classList.toggle(
+                        'active',
+                        link.getAttribute('href') === `#${id}`
+                    );
+                });
+            }
+
         }
+
     });
 
 }, {
-    threshold: 0.4   // секция считается активной когда видна на 40%
+    threshold: 0.45
 });
 
-sections.forEach(section => {
+observedSections.forEach(section => {
     menuObserver.observe(section);
 });
 
 
+// ===============================
+// Reveal animation on scroll
+// ===============================
 
-// === Reveal on scroll ===
-const observer = new IntersectionObserver(entries => {
+const revealObserver = new IntersectionObserver(entries => {
+
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
         }
     });
+
 }, {
-    threshold: 0.15
+    threshold: 0.45
 });
 
 document.querySelectorAll('.section').forEach(section => {
     section.classList.add('hidden');
-    observer.observe(section);
+    revealObserver.observe(section);
 });
-
