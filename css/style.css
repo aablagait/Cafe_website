@@ -334,3 +334,112 @@ body {
 .menu-actions {
     margin: 25px;
 }
+
+
+/*Адаптив под разные форматы экрана*/
+/*Десктоп*/
+@media (max-width: 992px) {
+
+    .nav {
+        padding: 15px 5%;
+    }
+
+    .section {
+        padding: 70px 5%;
+    }
+
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-text {
+        text-align: center;
+        max-width: 600px;
+    }
+
+    .cards {
+        flex-wrap: wrap;
+    }
+
+    .card {
+        width: 45%;
+    }
+
+    .contacts-top {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .working-hours {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .map-container {
+        width: 100%;
+    }
+}
+
+/*Планшет*/
+@media (max-width: 768px) {
+
+    .nav ul {
+        gap: 15px;
+    }
+
+    .nav a {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+
+    .hero-content h1 {
+        font-size: 32px;
+    }
+
+    .cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%;
+    }
+
+    .contacts-icons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .contacts-title {
+        font-size: 18px;
+    }
+
+}
+
+/*Телефон*/
+@media (max-width: 480px) {
+
+    .logo span {
+        display: none;
+    }
+
+    .hero-content h1 {
+        font-size: 26px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .hours-row {
+        font-size: 14px;
+    }
+
+}
+
