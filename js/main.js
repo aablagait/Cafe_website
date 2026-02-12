@@ -79,3 +79,17 @@ document.querySelectorAll('.section').forEach(section => {
     section.classList.add('hidden');
     revealObserver.observe(section);
 });
+
+const burger = document.getElementById("burger");
+const navMenu = document.getElementById("navMenu");
+
+burger.addEventListener("click", () => {
+    navMenu.classList.toggle("open");
+});
+
+// закрывать меню при клике на пункт
+document.querySelectorAll(".nav a").forEach(link => {
+    link.addEventListener("click", () => {
+        navMenu.classList.remove("open");
+    });
+});
