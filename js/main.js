@@ -1,95 +1,120 @@
-// ===============================
-// Smooth scroll
-// ===============================
+document.addEventListener("DOMContentLoaded", () => {
 
-document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
-        e.preventDefault();
+    /* =====================================
+       Smooth Scroll
+    ===================================== */
 
-        const target = document.querySelector(link.getAttribute('href'));
+    document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
 
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
+            const target = document.querySelector(link.getAttribute('href'));
 
-
-// ===============================
-// Active menu (Hero + Sections)
-// ===============================
-
-const menuLinks = document.querySelectorAll('.nav a');
-const observedSections = document.querySelectorAll('section[id], header[id]');
-
-let currentActive = null;
-
-const menuObserver = new IntersectionObserver(entries => {
-
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            const id = entry.target.getAttribute('id');
-
-            if (currentActive !== id) {
-                currentActive = id;
-
-                menuLinks.forEach(link => {
-                    link.classList.toggle(
-                        'active',
-                        link.getAttribute('href') === `#${id}`
-                    );
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
             }
-
-        }
-
+        });
     });
 
-}, {
-    threshold: 0.45
-});
 
-observedSections.forEach(section => {
-    menuObserver.observe(section);
-});
+    /* =====================================
+       Active Menu
+    ===================================== */
 
+    const menuLinks = document.querySelectorAll('.nav a');
+    const observedSections = document.querySelectorAll('section[id], header[id]');
+    let currentActive = null;
 
-// ===============================
-// Reveal animation on scroll
-// ===============================
+    const menuObserver = new IntersectionObserver(entries => {
 
-const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
 
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
+            if (entry.isIntersecting) {
+
+                const id = entry.target.getAttribute('id');
+
+                if (currentActive !== id) {
+                    currentActive = id;
+
+                    menuLinks.forEach(link => {
+                        link.classList.toggle(
+                            'active',
+                            link.getAttribute('href') === `#${id}`
+                        );
+                    });
+                }
+            }
+
+        });
+
+    }, {
+        threshold: 0.45
     });
 
-}, {
-    threshold: 0.45
-});
+    observedSections.forEach(section => {
+        menuObserver.observe(section);
+    });
 
-document.querySelectorAll('.section').forEach(section => {
-    section.classList.add('hidden');
-    revealObserver.observe(section);
-});
 
-const burger = document.getElementById("burger");
-const navMenu = document.getElementById("navMenu");
+    /* =====================================
+       Burger Menu + Overlay
+    ===================================== */
 
-burger.addEventListener("click", () => {
-    navMenu.classList.toggle("open");
-});
+    const burger = document.getElementById("burger");
+    const navMenu = document.getElementById("navMenu");
+    const overlay = document.getElementById("overlay");
 
-// закрывать меню при клике на пункт
-document.querySelectorAll(".nav a").forEach(link => {
-    link.addEventListener("click", () => {
+    function openMenu() {
+        navMenu.classList.add("open");
+        overlay.classList.add("show");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeMenu() {
         navMenu.classList.remove("open");
+        overlay.classList.remove("show");
+        document.body.style.overflow = "";
+    }
+
+    burger.addEventListener("click", () => {
+        if (navMenu.classList.contains("open")) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
     });
+
+    // Закрытие по клику вне меню
+    overlay.addEventListener("click", closeMenu);
+
+    // Закрытие при клике на пункт меню
+    document.querySelectorAll(".nav a").forEach(link => {
+        link.addEventListener("click", closeMenu);
+    });
+
+
+    /* =====================================
+       Swipe to Close
+    ===================================== */
+
+    let startX = 0;
+    let endX = 0;
+
+    navMenu.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+    });
+
+    navMenu.addEventListener("touchmove", e => {
+        endX = e.touches[0].clientX;
+    });
+
+    navMenu.addEventListener("touchend", () => {
+        if (startX - endX > 70) { // свайп влево больше 70px
+            closeMenu();
+        }
+    });
+
 });
